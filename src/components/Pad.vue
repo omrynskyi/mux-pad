@@ -82,12 +82,11 @@ export default {
 }
 
 .box {
-  border: 1px solid #aeb6bf;
-  flex: 1 0 auto;
-  /*box-sizing: border-box;
+  flex: 1;
+  box-sizing: border-box;
   margin: 5px;
   text-align: center;
-  border-radius: 5px;*/
+  border-radius: 5px;
 }
 
 .box:active,
