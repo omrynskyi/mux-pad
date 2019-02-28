@@ -24,6 +24,8 @@
 import Loops from "@/components/Loops.vue";
 import Pad from "@/components/Pad.vue";
 import LoopTimer from "@/components/LoopTimer.js";
+import AudioDecoder from "@/components/AudioDecoder.js";
+
 export default {
   name: "home",
   components: {
@@ -38,6 +40,7 @@ export default {
     const keyboard = {
       103: {
         name: "Kick808",
+        key: "Numpad7",
         code: 103,
         color: "#5a2266",
         sound: "kick-808",
@@ -45,6 +48,7 @@ export default {
       },
       104: {
         name: "snare vinyl",
+        key: "Numpad8",
         code: 104,
         color: "#17a59c",
         sound: "snare-vinyl01",
@@ -52,6 +56,7 @@ export default {
       },
       105: {
         name: "clap",
+        key: "Numpad9",
         code: 105,
         color: "green",
         sound: "clap-tape",
@@ -59,6 +64,7 @@ export default {
       },
       100: {
         name: "hi-hat",
+        key: "Numpad4",
         code: 100,
         color: "#ffd951",
         sound: "hihat-acoustic01",
@@ -66,6 +72,7 @@ export default {
       },
       101: {
         name: "hi-hat808",
+        key: "Numpad5",
         code: 101,
         color: "#dddd2c",
         sound: "hihat-808",
@@ -73,6 +80,7 @@ export default {
       },
       102: {
         name: "cowbell",
+        key: "Numpad6",
         code: 102,
         color: "#e2a036",
         sound: "cowbell-808",
@@ -80,6 +88,7 @@ export default {
       },
       97: {
         name: "Kick1",
+        key: "Numpad1",
         code: 97,
         color: "#8c56a5",
         sound: "kick-classic",
@@ -87,6 +96,7 @@ export default {
       },
       98: {
         name: "snare808",
+        key: "Numpad2",
         code: 98,
         color: "#33c4bd",
         sound: "snare-808",
@@ -94,6 +104,7 @@ export default {
       },
       99: {
         name: "Kick2",
+        key: "Numpad3",
         code: 99,
         color: "#873baa",
         sound: "kick-tape",
@@ -142,24 +153,15 @@ export default {
     this.timer = new LoopTimer(audioCtx, this.audioSettings, this.play);
 
     async function loadSounds(audioCtx, keyboard) {
+      const decoder = new AudioDecoder(audioCtx);
       for (const key in keyboard) {
         const item = keyboard[key];
-        item.audio = await loadFile(audioCtx, item.sound);
+        item.audio = await decoder.loadFile(`/sounds/${item.sound}.wav`);
       }
-    }
-
-    async function loadFile(audioContext, filepath) {
-      console.log(filepath);
-      const response = await fetch(`/sounds/${filepath}.wav`);
-      const arrayBuffer = await response.arrayBuffer();
-      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-      return audioBuffer;
     }
   },
   methods: {
     play: function(num, time) {
-      console.log(num, time);
-
       this.currentBeat = num;
       const audioCtx = this.audioCtx;
       audioCtx.resume();
