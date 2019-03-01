@@ -29,10 +29,10 @@
 }
 .key--code {
   opacity: 0.3;
-  font-size: 2vw;
+  font-size: 1.5vw;
 }
 .key--sound {
-  font-size: 3vw;
+  font-size: 2.5vw;
   color: #1f2d3d;
   opacity: 0.3;
   text-transform: uppercase;

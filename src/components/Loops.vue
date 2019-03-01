@@ -34,7 +34,7 @@ export default {
   border: 2px solid #aeb6bf;
   box-sizing: border-box;
   margin: 2px;
-  height: 2.5vw;
+  height: 3vh;
   border-radius: 2px;
 }
 
