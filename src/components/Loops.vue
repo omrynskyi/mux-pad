@@ -31,16 +31,14 @@ export default {
 }
 .loop {
   flex-basis: 100%;
-  border: 3px solid #aeb6bf;
+  border: 2px solid #aeb6bf;
   box-sizing: border-box;
   margin: 2px;
-  height: 20px;
-  border-radius: 3px;
+  height: 2.5vw;
+  border-radius: 2px;
 }
-.metronome.checked {
-  background: red;
-}
-.metronome.current {
+
+.loop.current {
   border-color: red !important;
 }
 </style>

@@ -22,7 +22,7 @@
 <script>
 // @ is an alias to /src
 import Loops from "@/components/Loops.vue";
-import Pad from "@/components/Pad.vue";
+import Pad from "@/components/Pad/Pad.vue";
 import LoopTimer from "@/components/LoopTimer.js";
 import AudioDecoder from "@/components/AudioDecoder.js";
 
@@ -42,7 +42,7 @@ export default {
         name: "Kick808",
         key: "Numpad7",
         code: 103,
-        color: "#5a2266",
+        color: "#6CBFF2",
         sound: "kick-808",
         selected: false
       },
@@ -50,7 +50,7 @@ export default {
         name: "snare vinyl",
         key: "Numpad8",
         code: 104,
-        color: "#17a59c",
+        color: "#E55934",
         sound: "snare-vinyl01",
         selected: false
       },
@@ -58,7 +58,7 @@ export default {
         name: "clap",
         key: "Numpad9",
         code: 105,
-        color: "green",
+        color: "#ADCF60",
         sound: "clap-tape",
         selected: false
       },
@@ -66,7 +66,7 @@ export default {
         name: "hi-hat",
         key: "Numpad4",
         code: 100,
-        color: "#ffd951",
+        color: "#FDE74C",
         sound: "hihat-acoustic01",
         selected: false
       },
@@ -74,7 +74,7 @@ export default {
         name: "hi-hat808",
         key: "Numpad5",
         code: 101,
-        color: "#dddd2c",
+        color: "#FDF19D",
         sound: "hihat-808",
         selected: false
       },
@@ -82,7 +82,7 @@ export default {
         name: "cowbell",
         key: "Numpad6",
         code: 102,
-        color: "#e2a036",
+        color: "#FB9D5D",
         sound: "cowbell-808",
         selected: false
       },
@@ -90,7 +90,7 @@ export default {
         name: "Kick1",
         key: "Numpad1",
         code: 97,
-        color: "#8c56a5",
+        color: "#36A8EE",
         sound: "kick-classic",
         selected: false
       },
@@ -98,7 +98,7 @@ export default {
         name: "snare808",
         key: "Numpad2",
         code: 98,
-        color: "#33c4bd",
+        color: "#F675A5",
         sound: "snare-808",
         selected: false
       },
@@ -106,7 +106,7 @@ export default {
         name: "Kick2",
         key: "Numpad3",
         code: 99,
-        color: "#873baa",
+        color: "#7FC7F4",
         sound: "kick-tape",
         selected: false
       }
