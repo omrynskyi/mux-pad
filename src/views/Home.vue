@@ -1,21 +1,26 @@
 <template>
   <div class="container">
     <header>
-      <div>
-        <button @click="start">{{(this.playing) ? "stop" : "play"}}</button>
-        <input type="range" min="60" max="240" v-model="audioSettings.bpm">
-        {{audioSettings.bpm}}
+      <div class="toolbox">
+        <el-button circle @click="start">
+          <i v-if="!this.playing" class="fas fa-play"></i>
+          <i v-else class="fas fa-stop"></i>
+        </el-button>
+        <span class="align__right">
+          <el-slider
+            :min="60"
+            :max="240"
+            v-model="audioSettings.bpm"
+            style="width: 50vw; float:right; margin-left: 2vw;"
+          ></el-slider>
+          <div style=" float: right; padding-top: 10px">BPM: {{audioSettings.bpm}}</div>
+        </span>
       </div>
       <Loops :loops="loops" :current="currentBeat"></Loops>
     </header>
     <main class="main">
       <Pad :keyboard="keyboard" :rows="rows" :audio-context="audioCtx"></Pad>
     </main>
-    <footer>
-      Press keys to play sounds
-      Click on squares on top
-      to loop the sounds and create a drum beat
-    </footer>
   </div>
 </template>
 
@@ -220,4 +225,13 @@ footer {
   color: black;
   width: 100%;
 }
+.toolbox {
+  text-align: left;
+}
+.align__right {
+  float: right;
+}
+/* * {
+  box-shadow: inset 0px 0px 0px 1px #f00;
+} */
 </style>
