@@ -2,6 +2,7 @@ export default {
   name: "Pad",
   props: ["keyboard", "rows", "audio-context"],
   mounted() {
+    this.allowPressKey = {};
     // Register an event listener when the Vue component is ready
     window.addEventListener("keydown", this.keyDown);
     window.addEventListener("keyup", this.keyUp);
@@ -27,19 +28,20 @@ export default {
     },
 
     keyDown: function(e) {
-      if (!this.allowPressKey) {
+      if (!this.allowPressKey[e.keyCode]) {
         return;
       }
 
-      this.allowPressKey = false;
+      this.allowPressKey[e.keyCode] = false;
       const key = this.keyboard[e.keyCode];
       if (key) {
         key.selected = true;
-        this.play(key);
+
+        setTimeout(() => this.play(key));
       }
     },
     keyUp: function(e) {
-      this.allowPressKey = true;
+      this.allowPressKey[e.keyCode] = true;
 
       const key = this.keyboard[e.keyCode];
       if (key) {
