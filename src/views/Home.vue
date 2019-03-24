@@ -6,6 +6,7 @@
           <i v-if="!this.playing" class="fas fa-play"></i>
           <i v-else class="fas fa-stop"></i>
         </el-button>
+        <el-switch v-model="numPad" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         <span class="align__right">
           <el-slider
             :min="60"
@@ -30,123 +31,67 @@ import Loops from "@/components/Loops.vue";
 import Pad from "@/components/Pad/Pad.vue";
 import LoopTimer from "@/components/LoopTimer.js";
 import AudioDecoder from "@/components/AudioDecoder.js";
-
+import Keyboards from "@/components/keyboards/keyboards.js";
 export default {
   name: "home",
   components: {
     Loops,
     Pad,
-    LoopTimer
+    LoopTimer,
+    Keyboards
   },
   data: function() {
+    let numPad = true;
     const maxBeats = 16;
     const bpm = 90;
 
-    const keyboard = {
-      103: {
-        name: "Kick808",
-        key: "Numpad7",
-        code: 103,
-        color: "#6CBFF2",
-        sound: "kick-808",
-        selected: false
-      },
-      104: {
-        name: "snare vinyl",
-        key: "Numpad8",
-        code: 104,
-        color: "#E55934",
-        sound: "snare-vinyl01",
-        selected: false
-      },
-      105: {
-        name: "clap",
-        key: "Numpad9",
-        code: 105,
-        color: "#ADCF60",
-        sound: "clap-tape",
-        selected: false
-      },
-      100: {
-        name: "hi-hat",
-        key: "Numpad4",
-        code: 100,
-        color: "#FDE74C",
-        sound: "hihat-acoustic01",
-        selected: false
-      },
-      101: {
-        name: "hi-hat808",
-        key: "Numpad5",
-        code: 101,
-        color: "#FDF19D",
-        sound: "hihat-808",
-        selected: false
-      },
-      102: {
-        name: "cowbell",
-        key: "Numpad6",
-        code: 102,
-        color: "#FB9D5D",
-        sound: "cowbell-808",
-        selected: false
-      },
-      97: {
-        name: "Kick1",
-        key: "Numpad1",
-        code: 97,
-        color: "#36A8EE",
-        sound: "kick-classic",
-        selected: false
-      },
-      98: {
-        name: "snare808",
-        key: "Numpad2",
-        code: 98,
-        color: "#F675A5",
-        sound: "snare-808",
-        selected: false
-      },
-      99: {
-        name: "Kick2",
-        key: "Numpad3",
-        code: 99,
-        color: "#7FC7F4",
-        sound: "kick-tape",
-        selected: false
-      }
-    };
-
     //TODO: rework to build rows automatically based on ther grid settings
-    const rows = [
-      [keyboard[103], keyboard[104], keyboard[105]],
-      [keyboard[100], keyboard[101], keyboard[102]],
-      [keyboard[97], keyboard[98], keyboard[99]]
-    ];
-
-    const loops = [];
-    for (let key in keyboard) {
-      const loop = {
-        beats: [],
-        key: keyboard[key]
-      };
-      loops.push(loop);
-
-      for (let i = 0; i < maxBeats; i++) {
-        loop.beats.push({
-          selected: false
-        });
-      }
-    }
 
     return {
-      keyboard: keyboard,
-      rows: rows,
-      loops: loops,
       playing: false,
       audioSettings: { bpm: bpm, mB: maxBeats },
-      currentBeat: 0
+      currentBeat: 0,
+      numPad: numPad
     };
+  },
+  computed: {
+    keyboard: function() {
+      const layout = this.NumPad ? Keyboards.NumPad : Keyboards.asdfghjkl;
+      const keyboard = {};
+      for (let i = 0; i < layout.length; i++) {
+        keyboard[layout[i].code] = layout[i];
+      }
+      return keyboard;
+    },
+    rows: function() {
+      const rows = [];
+      let row;
+      const col = 2;
+      for (let i = 0; i < layout.length; i++) {
+        if (i % col == 0) {
+          row = [];
+          rows.push(row);
+        }
+        row.push(layout[i]);
+      }
+      return rows;
+    },
+    loops: function() {
+      const loops = [];
+      for (let key in keyboard) {
+        const loop = {
+          beats: [],
+          key: keyboard[key]
+        };
+        loops.push(loop);
+
+        for (let i = 0; i < maxBeats; i++) {
+          loop.beats.push({
+            selected: false
+          });
+        }
+      }
+    }
   },
   async created() {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
