@@ -1,6 +1,8 @@
 <template>
   <div>
+    
     <div class="loops" v-for="(loop, j) in loops" :key="j">
+      
       <div
         v-for="(beat, i) in loop.beats"
         :key="i"

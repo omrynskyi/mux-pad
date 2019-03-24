@@ -6,7 +6,10 @@
           <i v-if="!this.playing" class="fas fa-play"></i>
           <i v-else class="fas fa-stop"></i>
         </el-button>
-        <el-switch v-model="numPad" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+        <el-switch v-model="numPad" 
+        active-color="#13ce66" 
+        inactive-color="#ff4949"
+        style="float:right;margin-left: 2vw;"></el-switch>
         <span class="align__right">
           <el-slider
             :min="60"
@@ -51,46 +54,53 @@ export default {
       playing: false,
       audioSettings: { bpm: bpm, mB: maxBeats },
       currentBeat: 0,
-      numPad: numPad
+      numPad: numPad,
+      maxBeats : maxBeats
     };
   },
   computed: {
+    layout: function(){
+      console.log('layout');
+      const layout = this.numPad ? Keyboards.numpad : Keyboards.asdfghjkl;
+      return layout;
+    },
     keyboard: function() {
-      const layout = this.NumPad ? Keyboards.NumPad : Keyboards.asdfghjkl;
+      console.log('keyboard');
       const keyboard = {};
-      for (let i = 0; i < layout.length; i++) {
-        keyboard[layout[i].code] = layout[i];
+      for (let i = 0; i < this.layout.length; i++) {
+        keyboard[this.layout[i].code] = this.layout[i];
       }
       return keyboard;
     },
     rows: function() {
       const rows = [];
       let row;
-      const col = 2;
-      for (let i = 0; i < layout.length; i++) {
+      const col = 3;
+      for (let i = 0; i < this.layout.length; i++) {
         if (i % col == 0) {
           row = [];
           rows.push(row);
         }
-        row.push(layout[i]);
+        row.push(this.layout[i]);
       }
       return rows;
     },
     loops: function() {
       const loops = [];
-      for (let key in keyboard) {
+      for (let key in this.keyboard) {
         const loop = {
           beats: [],
-          key: keyboard[key]
+          key: this.keyboard[key]
         };
         loops.push(loop);
 
-        for (let i = 0; i < maxBeats; i++) {
+        for (let i = 0; i < this.maxBeats; i++) {
           loop.beats.push({
             selected: false
           });
         }
       }
+      return loops;
     }
   },
   async created() {

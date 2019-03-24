@@ -12,6 +12,7 @@ export default {
 
   methods: {
     play: function(key) {
+      console.log(key);
       const audioCtx = this.audioContext;
       this.selectedKey = key;
       audioCtx.resume();
@@ -28,6 +29,7 @@ export default {
     },
 
     keyDown: function(e) {
+      console.log(this.keyboard);
       if (!this.allowPressKey[e.keyCode]) {
         return;
       }

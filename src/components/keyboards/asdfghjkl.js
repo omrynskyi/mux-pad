@@ -1,24 +1,24 @@
 export default [
   {
     name: "Kick-808",
-    key: "Numpad7",
-    code: 103,
+    key: "a",
+    code: 65,
     color: "#6CBFF2",
     sound: "kick-808",
     selected: false
   },
   {
     name: "snare vinyl",
-    key: "Numpad8",
-    code: 104,
+    key: "s",
+    code: 83,
     color: "#E55934",
     sound: "snare-vinyl01",
     selected: false
   },
   {
     name: "clap",
-    key: "Numpad9",
-    code: 105,
+    key: "d",
+    code: 68,
     color: "#ADCF60",
     sound: "clap-tape",
     selected: false

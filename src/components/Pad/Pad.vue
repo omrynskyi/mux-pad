@@ -1,5 +1,6 @@
 <template>
   <div class="pad">
+    {{keyboard}}
     <div v-for="(row, i) in rows" :key="i" class="row">
       <div
         v-for="(key, j) in row"
