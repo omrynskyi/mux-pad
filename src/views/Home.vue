@@ -55,52 +55,15 @@ export default {
       audioSettings: { bpm: bpm, mB: maxBeats },
       currentBeat: 0,
       numPad: numPad,
-      maxBeats : maxBeats
+      maxBeats : maxBeats,
+      keyboard: {},
+      loops: [],
+      rows :[]
     };
   },
-  computed: {
-    layout: function(){
-      console.log('layout');
-      const layout = this.numPad ? Keyboards.numpad : Keyboards.asdfghjkl;
-      return layout;
-    },
-    keyboard: function() {
-      console.log('keyboard');
-      const keyboard = {};
-      for (let i = 0; i < this.layout.length; i++) {
-        keyboard[this.layout[i].code] = this.layout[i];
-      }
-      return keyboard;
-    },
-    rows: function() {
-      const rows = [];
-      let row;
-      const col = 3;
-      for (let i = 0; i < this.layout.length; i++) {
-        if (i % col == 0) {
-          row = [];
-          rows.push(row);
-        }
-        row.push(this.layout[i]);
-      }
-      return rows;
-    },
-    loops: function() {
-      const loops = [];
-      for (let key in this.keyboard) {
-        const loop = {
-          beats: [],
-          key: this.keyboard[key]
-        };
-        loops.push(loop);
-
-        for (let i = 0; i < this.maxBeats; i++) {
-          loop.beats.push({
-            selected: false
-          });
-        }
-      }
-      return loops;
+  watch: {
+    numPad: function() {
+      this.initKeyboard();
     }
   },
   async created() {
@@ -119,8 +82,45 @@ export default {
         item.audio = await decoder.loadFile(`/sounds/${item.sound}.wav`);
       }
     }
+
+    this.initKeyboard();
   },
   methods: {
+    initKeyboard: function() {
+      const layout = this.numPad ? Keyboards.numpad : Keyboards.asdfghjkl;
+    this.loops =[],
+      this.rows =[]
+      this.keyboard = {};
+      for (let i = 0; i < layout.length; i++) {
+        this.keyboard[layout[i].code] = layout[i];
+      }
+
+
+      let row;
+      const col = 3;
+      for (let i = 0; i < layout.length; i++) {
+        if (i % col == 0) {
+          row = [];
+          this.rows.push(row);
+        }
+        row.push(layout[i]);
+      }
+
+      for (let key in this.keyboard) {
+        const loop = {
+          beats: [],
+          key: this.keyboard[key]
+        };
+        this.loops.push(loop);
+
+        for (let i = 0; i < this.maxBeats; i++) {
+          loop.beats.push({
+            selected: false
+          });
+        }
+      }
+    },
+    
     play: function(num, time) {
       this.currentBeat = num;
       const audioCtx = this.audioCtx;
