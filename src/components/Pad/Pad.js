@@ -29,7 +29,10 @@ export default {
     },
 
     keyDown: function(e) {
-      console.log(this.keyboard);
+      if (typeof this.allowPressKey[e.keyCode] === "undefined") {
+        this.allowPressKey[e.keyCode] = true;
+      }
+
       if (!this.allowPressKey[e.keyCode]) {
         return;
       }

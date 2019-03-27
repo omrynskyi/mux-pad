@@ -2,24 +2,25 @@
   <div class="container">
     <header>
       <div class="toolbox">
-        <el-button circle @click="start">
-          <i v-if="!this.playing" class="fas fa-play"></i>
-          <i v-else class="fas fa-stop"></i>
-        </el-button>
-        <el-switch v-model="numPad" 
-        active-color="#13ce66" 
-        inactive-color="#ff4949"
-        style="float:right;margin-left: 2vw;"></el-switch>
-        <span class="align__right">
-          <el-slider
-            :min="60"
-            :max="240"
-            v-model="audioSettings.bpm"
-            style="width: 50vw; float:right; margin-left: 2vw;"
-          ></el-slider>
-          <div style=" float: right; padding-top: 10px">BPM: {{audioSettings.bpm}}</div>
-        </span>
+        <div class="toolbox--item">
+          <el-button circle @click="start">
+            <i v-if="!this.playing" class="fas fa-play"></i>
+            <i v-else class="fas fa-stop"></i>
+          </el-button>
+        </div>
+
+        <div class="toolbox--item">
+          <div class="toolbox--lable">bpm: {{audioSettings.bpm}}</div>
+          <div>
+            <el-slider :min="60" :max="240" v-model="audioSettings.bpm" style="width: 30vw;"></el-slider>
+          </div>
+        </div>
+        <div class="toolbox--item">
+          <div class="toolbox--lable">numpad</div>
+          <el-switch v-model="numPad" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+        </div>
       </div>
+
       <Loops :loops="loops" :current="currentBeat"></Loops>
     </header>
     <main class="main">
@@ -30,7 +31,7 @@
 
 <script>
 // @ is an alias to /src
-import Loops from "@/components/Loops.vue";
+import Loops from "@/components/Loops/Loops.vue";
 import Pad from "@/components/Pad/Pad.vue";
 import LoopTimer from "@/components/LoopTimer.js";
 import AudioDecoder from "@/components/AudioDecoder.js";
@@ -44,7 +45,7 @@ export default {
     Keyboards
   },
   data: function() {
-    let numPad = true;
+    let numPad = false;
     const maxBeats = 16;
     const bpm = 90;
 
@@ -55,10 +56,10 @@ export default {
       audioSettings: { bpm: bpm, mB: maxBeats },
       currentBeat: 0,
       numPad: numPad,
-      maxBeats : maxBeats,
+      maxBeats: maxBeats,
       keyboard: {},
       loops: [],
-      rows :[]
+      rows: []
     };
   },
   watch: {
@@ -71,30 +72,19 @@ export default {
     const audioCtx = new AudioContext();
     this.audioCtx = audioCtx;
 
-    await loadSounds(audioCtx, this.keyboard);
+    await this.initKeyboard();
 
     this.timer = new LoopTimer(audioCtx, this.audioSettings, this.play);
-
-    async function loadSounds(audioCtx, keyboard) {
-      const decoder = new AudioDecoder(audioCtx);
-      for (const key in keyboard) {
-        const item = keyboard[key];
-        item.audio = await decoder.loadFile(`/sounds/${item.sound}.wav`);
-      }
-    }
-
-    this.initKeyboard();
   },
   methods: {
-    initKeyboard: function() {
+    initKeyboard: async function() {
       const layout = this.numPad ? Keyboards.numpad : Keyboards.asdfghjkl;
-    this.loops =[],
-      this.rows =[]
+      this.loops = [];
+      this.rows = [];
       this.keyboard = {};
       for (let i = 0; i < layout.length; i++) {
         this.keyboard[layout[i].code] = layout[i];
       }
-
 
       let row;
       const col = 3;
@@ -119,8 +109,18 @@ export default {
           });
         }
       }
+
+      await this.loadSounds();
     },
-    
+
+    loadSounds: async function() {
+      const decoder = new AudioDecoder(this.audioCtx);
+      for (const key in this.keyboard) {
+        const item = this.keyboard[key];
+        item.audio = await decoder.loadFile(`/sounds/${item.sound}.wav`);
+      }
+    },
+
     play: function(num, time) {
       this.currentBeat = num;
       const audioCtx = this.audioCtx;
@@ -163,6 +163,7 @@ html,
 body,
 #app {
   height: 100%;
+  margin: 0;
 }
 .container {
   min-height: 100%;
@@ -181,10 +182,20 @@ footer {
   width: 100%;
 }
 .toolbox {
+  display: flex;
+  align-items: center;
   text-align: left;
+  justify-content: space-between;
+  margin: 5px;
 }
-.align__right {
-  float: right;
+
+.toolbox--item {
+  display: flex;
+  align-items: center;
+}
+
+.toolbox--lable {
+  margin-right: 5px;
 }
 /* * {
   box-shadow: inset 0px 0px 0px 1px #f00;
