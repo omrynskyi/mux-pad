@@ -1,6 +1,6 @@
 # mux-pad
 
-Music drum pad to play and lo nop music
+Music drum pad to play and lo nop music - [MuxPad.ml](https://muxpad.ml/)
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/9ebc206d-9756-45ed-999d-6b5ec19ea4ed/deploy-status)](https://app.netlify.com/sites/friendly-mcclintock-dd6b16/deploys)
 
