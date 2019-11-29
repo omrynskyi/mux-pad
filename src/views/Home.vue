@@ -15,16 +15,23 @@
             <el-slider :min="60" :max="240" v-model="audioSettings.bpm" style="width: 30vw;"></el-slider>
           </div>
         </div>
+         
         <div class="toolbox--item">
           <div class="toolbox--lable">numpad</div>
           <el-switch v-model="numPad" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+        </div>
+        <div class="toolbox--item">
+          <el-button circle @click="toggleEdit">
+            <i class="fas fa-cog"></i>
+            
+          </el-button>
         </div>
       </div>
 
       <Loops :loops="loops" :current="currentBeat"></Loops>
     </header>
     <main class="main">
-      <Pad :keyboard="keyboard" :rows="rows" :audio-context="audioCtx"></Pad>
+      <Pad :keyboard="keyboard" :rows="rows" :audio-context="audioCtx" :edit="edit"></Pad>
     </main>
   </div>
 </template>
@@ -59,7 +66,8 @@ export default {
       maxBeats: maxBeats,
       keyboard: {},
       loops: [],
-      rows: []
+      rows: [],
+      edit: false
     };
   },
   watch: {
@@ -77,6 +85,10 @@ export default {
     this.timer = new LoopTimer(audioCtx, this.audioSettings, this.play);
   },
   methods: {
+    toggleEdit: function() {
+      this.edit = !this.edit;
+      console.log(this.edit);
+    },
     initKeyboard: async function() {
       const layout = this.numPad ? Keyboards.numpad : Keyboards.asdfghjkl;
       this.loops = [];

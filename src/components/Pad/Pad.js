@@ -1,6 +1,7 @@
+import AudioDecoder from "@/components/AudioDecoder.js";
 export default {
   name: "Pad",
-  props: ["keyboard", "rows", "audio-context"],
+  props: ["keyboard", "rows", "audio-context", "edit"],
   mounted() {
     this.allowPressKey = {};
     // Register an event listener when the Vue component is ready
@@ -9,22 +10,62 @@ export default {
     window.addEventListener("touchstart", this.keyDown);
     window.addEventListener("touchend", this.keyUp);
   },
-
+  data() {
+    return {
+      sounds: [{
+        name: "Kick-808",
+        sound: "kick-808",
+      },
+      {
+        name: "snare vinyl",
+        sound: "snare-vinyl01",
+      },
+      {
+        name: "clap",
+        sound: "clap-tape",
+      },
+      {
+        name: "hi-hat",
+        sound: "hihat-acoustic01",
+      },
+      {
+        name: "hi-hat808",
+        sound: "hihat-808",
+      },
+      {
+        name: "cowbell",
+        sound: "cowbell-808",
+      },
+      {
+        name: "Kick1",
+        sound: "kick-classic",
+      },
+      {
+        name: "snare808",
+        sound: "snare-808",
+      },
+      {
+        name: "Kick2",
+        sound: "kick-tape",
+      }],
+      editKey: false,
+      currentKey:{}
+    }
+  },
   methods: {
     play: function(key) {
       console.log(key);
-      const audioCtx = this.audioContext;
       this.selectedKey = key;
-      audioCtx.resume();
+      this.audioContext.resume();
 
       const playbackRate = 1;
-      const sampleSource = audioCtx.createBufferSource();
+      const sampleSource = this.audioContext.createBufferSource();
       sampleSource.buffer = key.audio;
       sampleSource.playbackRate.setValueAtTime(
         playbackRate,
-        audioCtx.currentTime
+        this.audioContext.currentTime
       );
-      sampleSource.connect(audioCtx.destination);
+      sampleSource.connect(this.audioContext.destination);
       sampleSource.start();
     },
 
@@ -55,7 +96,25 @@ export default {
     },
 
     select: function(key) {
-      this.play(key);
+      if (this.edit) {
+        this.editKey = true;
+        this.selectedKey = key;
+        this.currentKey.sound = this.selectedKey.sound;
+        this.currentKey.color = this.selectedKey.color;
+      } else { 
+        this.play(key);
+      }
+    },
+
+    confirmEdit: async function() {
+      this.editKey = false;
+      this.selectedKey.name= this.currentKey.name;
+      this.selectedKey.sound= this.currentKey.sound;
+      this.selectedKey.color = this.currentKey.color;
+
+      const decoder = new AudioDecoder(this.audioContext);
+      this.selectedKey.audio = await decoder.loadFile(`/sounds/${this.selectedKey.sound}.wav`);
+      
     }
   }
 };
